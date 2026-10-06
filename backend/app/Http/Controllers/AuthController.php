@@ -5,14 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
     public function login(Request $request){
         
          $validate=Validator::make($request->all(),[
-            'email'=>'required|email|exists:users',
+            'email'=>'required|email',
             'password'=>'required',
         ]);
 
