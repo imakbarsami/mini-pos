@@ -32,6 +32,7 @@ class AuthController extends Controller
                 'status'=>200,
                 'token'=>$token,
                 'name'=>$user->name,
+                'email'=>$user->email,
                 'id'=>$user->id
             ],200);
 
