@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
@@ -23,4 +24,6 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('/orders', [OrderController::class, 'store']);
     Route::put('/orders/{id}/complete', [OrderController::class, 'completeOrder']);
     Route::get('/orders/{id}', [OrderController::class, 'show']);
+
+    Route::get('/dashboard', [DashboardController::class, 'index']);
 });
