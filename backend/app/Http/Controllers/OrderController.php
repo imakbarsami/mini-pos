@@ -176,4 +176,63 @@ class OrderController extends Controller
             ], 400);
         }
     }
+
+
+    public function show($id)
+    {
+        
+        $order = Order::with([
+                'customer:id,name,phone,address',
+                'orderItems:id,order_id,product_id,quantity,unit_price,line_total',
+                'orderItems.product:id,name',
+                'journalEntry.lines.account:id,name'
+            ])->find($id);
+
+        if (!$order) {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Order not found'
+            ], 404);
+        }
+
+        
+        $invoiceData = [
+            'order_info' => [
+                'order_number' => $order->order_number,
+                'date' => $order->created_at->format('d M Y, h:i A'), 
+                'status' => $order->status,
+                'sub_total' => $order->sub_total,
+                'tax_amount' => $order->tax_amount,
+                'grand_total' => $order->grand_total,
+            ],
+            'customer_info' => [
+                'name' => $order->customer->name,
+                'phone' => $order->customer->phone,
+                'address' => $order->customer->address,
+            ],
+            
+            'items' => $order->orderItems->map(function ($item) {
+                return [
+                    'product_name' => $item->product->name,
+                    'quantity' => $item->quantity,
+                    'unit_price' => $item->unit_price,
+                    'line_total' => $item->line_total,
+                ];
+            }),
+            
+            'accounting_breakdown' => $order->journalEntry ? $order->journalEntry->lines->map(function ($line) {
+                return [
+                    'account_name' => $line->account->name,
+                    'type' => $line->type, 
+                    'amount' => $line->amount,
+                ];
+            }) : null,
+        ];
+
+        
+        return response()->json([
+            'status' => 200,
+            'data' => $invoiceData
+        ],200);
+    }
 }

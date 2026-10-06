@@ -22,4 +22,5 @@ Route::middleware('auth:sanctum')->group(function(){
 
     Route::post('/orders', [OrderController::class, 'store']);
     Route::put('/orders/{id}/complete', [OrderController::class, 'completeOrder']);
+    Route::get('/orders/{id}', [OrderController::class, 'show']);
 });
