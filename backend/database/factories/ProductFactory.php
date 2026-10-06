@@ -61,8 +61,8 @@ class ProductFactory extends Factory
         return [
             'name' => $name,
             'sku' => 'PRD-' . fake()->unique()->bothify('???-####'),
-            'price' => fake()->randomFloat(2, 100, 50000),
-            'stock_quantity' => fake()->numberBetween(0, 500),
+            'price' => fake()->randomFloat(2, 100, 2000),
+            'stock_quantity' => fake()->numberBetween(0, 100),
             'image' => 'https://dummyimage.com/300x300/eeeeee/333336.png?text='. urlencode($name),
         ];
     }

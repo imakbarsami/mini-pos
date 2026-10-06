@@ -39,7 +39,7 @@ class ProductSeeder extends Seeder
                 'name' => 'HP 16GB Pendrive',
                 'sku' => 'PRD-PEN-004',
                 'price' => 550.00,
-                'stock_quantity' => 100,
+                'stock_quantity' => 50,
                 'image' => 'https://dummyimage.com/300x300/eeeeee/333336.png&text=Pendrive'
             ],
         ];
