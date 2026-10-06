@@ -44,12 +44,14 @@ class ProductSeeder extends Seeder
             ],
         ];
 
-        foreach($products as $product){
+        // foreach($products as $product){
 
-            // avoid duplicate data
-            Product::firstOrCreate([
-                'sku' => $product['sku']
-            ], $product);
-        }
+        //     // avoid duplicate data
+        //     Product::firstOrCreate([
+        //         'sku' => $product['sku']
+        //     ], $product);
+        // }
+
+        Product::factory()->count(70)->create();
     }
 }
