@@ -11,7 +11,7 @@ import Error from './components/Error';
 function App() {
 
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  // const user=useSelector(state=>console.log(state))
+  const user=useSelector(state=>console.log(state))
 
   return (
     <Router>
