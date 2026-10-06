@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Account;
 use App\Models\Order;
 use App\Models\Product;
 use DB;
@@ -81,5 +82,98 @@ class OrderController extends Controller
             ], 500);
         }
 
+    }
+
+
+    public function completeOrder($id)
+    {
+
+        $order = Order::with('orderItems.product')->find($id);
+
+        if (!$order) {
+
+            return response()->json([
+                'status' => 404, 
+                'message' => 'Order not found'
+            ],404);
+        }
+
+        if ($order->status === 'Completed') {
+
+            return response()->json([
+                'status' => 400, 
+                'message' => 'Order already completed'
+            ],400);
+        }
+
+        try {
+            DB::beginTransaction();
+
+            // stock check & stock quantity deduction
+            foreach ($order->orderItems as $item) {
+
+                $product = $item->product;
+                
+                if ($product->stock_quantity < $item->quantity) {
+
+                    throw new \Exception("Sorry, '{$product->name}' stock is not available. Available: {$product->stock_quantity} , Ordered: {$item->quantity}");
+                }
+
+                
+                $product->stock_quantity -= $item->quantity;
+                $product->save();
+            }
+
+            // order status update
+            $order->status = 'Completed';
+            $order->save();
+
+
+            $arAccount = Account::where('name', 'Accounts Receivable')->firstOrFail();
+            $revenueAccount = Account::where('name', 'Sales Revenue')->firstOrFail();
+            $taxAccount = Account::where('name', 'Tax Payable')->firstOrFail();
+
+            // journal entry
+            $journalEntry = $order->journalEntry()->create([
+                'date' => now()->toDateString(),
+            ]);
+
+            
+            $journalEntry->lines()->create([
+                'account_id' => $arAccount->id,
+                'type' => 'Debit',
+                'amount' => $order->grand_total,
+            ]);
+
+            
+            $journalEntry->lines()->create([
+                'account_id' => $revenueAccount->id,
+                'type' => 'Credit',
+                'amount' => $order->sub_total,
+            ]);
+
+            
+            $journalEntry->lines()->create([
+                'account_id' => $taxAccount->id,
+                'type' => 'Credit',
+                'amount' => $order->tax_amount,
+            ]);
+
+            
+            DB::commit();
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Order completed successfully and accounting completed.'
+            ],200);
+
+        } catch (\Exception $e) {
+          
+            DB::rollBack(); 
+            return response()->json([
+                'status' => 400, 
+                'message' => $e->getMessage()
+            ], 400);
+        }
     }
 }
