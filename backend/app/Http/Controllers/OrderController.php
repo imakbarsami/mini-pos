@@ -200,7 +200,7 @@ class OrderController extends Controller
 
             return response()->json([
                 'status' => 200,
-                'message' => 'Order completed successfully and accounting completed.'
+                'message' => 'Order completed successfully'
             ],200);
 
         } catch (\Exception $e) {
