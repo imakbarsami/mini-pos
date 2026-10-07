@@ -8,6 +8,7 @@ import POS from './pages/POS';
 import  ProtectedRoute  from './components/ProtectedRoute';
 import Error from './components/Error';
 import Orders from './pages/Orders';
+import Invoice from './pages/Invoice';
 
 function App() {
 
@@ -37,6 +38,7 @@ function App() {
           <Route index element={<Dashboard />} />
           <Route path="pos" element={<POS />} />
           <Route path="orders" element={<Orders />} />
+          <Route path="invoice/:id" element={<Invoice />} />
 
         </Route>
       </Routes>

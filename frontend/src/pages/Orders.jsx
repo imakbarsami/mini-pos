@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
 import toast from 'react-hot-toast';
-import { FiSearch, FiCalendar, FiChevronLeft, FiChevronRight, FiCheck, FiEye } from 'react-icons/fi';
+import { FiSearch, FiCalendar, FiChevronLeft, FiChevronRight, FiCheck, FiEye, FiList } from 'react-icons/fi';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import Pagination from '../components/Pagination';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
+import ViewOrderModal from '../components/ViewOrderModal';
 
 const Orders = () => {
+
+    const navigate = useNavigate();
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -18,6 +22,9 @@ const Orders = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [totalItems, setTotalItems] = useState(0);
 
+
+    const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+    const [selectedOrderId, setSelectedOrderId] = useState(null);
 
     const fetchOrders = async () => {
 
@@ -87,6 +94,13 @@ const Orders = () => {
         }
     };
 
+
+
+    const handleViewOrder = (id) => {
+        setSelectedOrderId(id);
+        setIsViewModalOpen(true);
+    };
+
     useEffect(() => {
         setCurrentPage(1);
     }, [search, date, status]);
@@ -128,14 +142,14 @@ const Orders = () => {
 
                     {/* Date Filter */}
                     <div className="relative w-full sm:w-48">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 ">
                             <FiCalendar />
                         </div>
                         <input
                             type="date"
                             value={date}
                             onChange={(e) => setDate(e.target.value)}
-                            className="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all outline-none bg-gray-50 text-sm"
+                            className="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all outline-none bg-gray-50 text-sm cursor-pointer"
                         />
                     </div>
 
@@ -144,7 +158,7 @@ const Orders = () => {
                         <select
                             value={status}
                             onChange={(e) => setStatus(e.target.value)}
-                            className="block w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all outline-none bg-gray-50 text-sm appearance-none"
+                            className="block w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all outline-none bg-gray-50 text-sm appearance-none cursor-pointer"
                         >
                             <option value="">All Status</option>
                             <option value="Pending">Pending</option>
@@ -205,17 +219,27 @@ const Orders = () => {
                                                 </span>
                                             </td>
                                             <td className="px-6 py-4 text-center flex justify-center gap-2">
+                                                {/* View Button */}
+                                                <button
+                                                    onClick={() => handleViewOrder(order.id)}
+                                                    className="flex items-center gap-1 bg-teal-600 text-white px-3 py-1.5 rounded hover:bg-teal-700 transition-colors shadow-sm cursor-pointer"
+                                                    title="View Details"
+                                                >
+                                                    <FiList size={14} /> View
+                                                </button>
+
                                                 {order.status === 'Pending' ? (
                                                     <button
                                                         onClick={() => handleCompleteOrder(order.id)}
-                                                        className="flex items-center gap-1 bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700 transition-colors shadow-sm"
+                                                        className="flex items-center gap-1 bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700 transition-colors shadow-sm cursor-pointer"
                                                         title="Complete Order"
                                                     >
                                                         <FiCheck size={14} /> Complete
                                                     </button>
                                                 ) : (
                                                     <button
-                                                        className="flex items-center gap-1 bg-gray-800 text-white px-3 py-1.5 rounded hover:bg-gray-900 transition-colors shadow-sm"
+                                                        onClick={() => navigate(`/invoice/${order.id}`)}
+                                                        className="flex items-center gap-1 bg-gray-800 text-white px-3 py-1.5 rounded hover:bg-gray-900 transition-colors cursor-pointer"
                                                         title="View Invoice"
                                                     >
                                                         <FiEye size={14} /> Invoice
@@ -240,6 +264,12 @@ const Orders = () => {
                 )}
             </div>
 
+            {/* View Order Modal */}
+            <ViewOrderModal
+                isOpen={isViewModalOpen}
+                onClose={() => setIsViewModalOpen(false)}
+                orderId={selectedOrderId}
+            />
         </div>
     );
 };

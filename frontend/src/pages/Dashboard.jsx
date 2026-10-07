@@ -9,16 +9,24 @@ import {
   FiClock,
   FiCheckCircle,
   FiEye,
-  FiCheck
+  FiCheck,
+  FiList
 } from 'react-icons/fi';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
+import ViewOrderModal from '../components/ViewOrderModal';
 
 const Dashboard = () => {
 
+
+  const navigate = useNavigate();
   const [summary, setSummary] = useState(null);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
 
   const fetchDashboardData = async () => {
 
@@ -79,6 +87,11 @@ const Dashboard = () => {
         Swal.fire('Error!', errorMsg, 'error');
       }
     }
+  };
+
+  const handleViewOrder = (id) => {
+    setSelectedOrderId(id);
+    setIsViewModalOpen(true);
   };
 
   useEffect(() => {
@@ -230,17 +243,28 @@ const Dashboard = () => {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-center flex justify-center gap-2">
+
+                      {/* View Button */}
+                      <button
+                        onClick={() => handleViewOrder(order.id)}
+                        className="flex items-center gap-1 bg-teal-600 text-white px-3 py-1.5 rounded hover:bg-teal-700 transition-colors shadow-sm cursor-pointer"
+                        title="View Details"
+                      >
+                        <FiList size={14} /> View
+                      </button>
+                      
                       {order.status === 'Pending' ? (
                         <button
                           onClick={() => handleCompleteOrder(order.id)}
-                          className="flex items-center gap-1 bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700 transition-colors shadow-sm"
+                          className="flex items-center gap-1 bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700 transition-colors shadow-sm cursor-pointer"
                           title="Complete Order"
                         >
                           <FiCheck size={14} /> Complete
                         </button>
                       ) : (
                         <button
-                          className="flex items-center gap-1 bg-gray-800 text-white px-3 py-1.5 rounded hover:bg-gray-900 transition-colors"
+                          onClick={() => navigate(`/invoice/${order.id}`)}
+                          className="flex items-center gap-1 bg-gray-800 text-white px-3 py-1.5 rounded hover:bg-gray-900 transition-colors cursor-pointer"
                           title="View Invoice"
                         >
                           <FiEye size={14} /> Invoice
@@ -255,6 +279,12 @@ const Dashboard = () => {
         </div>
       </div>
 
+      {/* Invoice Modal */}
+      <ViewOrderModal
+        isOpen={isViewModalOpen}
+        onClose={() => setIsViewModalOpen(false)}
+        orderId={selectedOrderId}
+      />
     </div>
   );
 };
