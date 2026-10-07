@@ -10,6 +10,42 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
+   public function index(Request $request)
+    {
+
+        $query = Order::with('customer:id,name,phone');
+
+        //serach 
+        if ($request->has('search') && !empty($request->search)) {
+
+            $search = $request->search;
+            $query->where('order_number', 'like', "%{$search}%")
+                  ->orWhereHas('customer', function($q) use ($search) {
+                      $q->where('name', 'like', "%{$search}%");
+                  });
+        }
+
+        // date filter
+        if ($request->has('date') && !empty($request->date)) {
+            $query->whereDate('created_at', $request->date);
+        }
+
+        if ($request->has('status') && !empty($request->status)) {
+            $query->where('status', $request->status);
+        }
+
+        $limit = $request->has('limit') ? (int) $request->limit : 9;
+        
+        $orders = $query->orderBy('id', 'desc')
+                        ->paginate($limit);
+
+        return response()->json([
+            'status' => 200,
+            'data' => $orders 
+        ]);
+    }
+
+
     public function store(Request $request){
 
         $request->validate([
