@@ -235,7 +235,8 @@ class OrderController extends Controller
         $invoiceData = [
             'order_info' => [
                 'order_number' => $order->order_number,
-                'date' => $order->created_at->format('d M Y, h:i A'), 
+                'order_date' => $order->created_at, 
+                'order_complete_date' => $order->updated_at, 
                 'status' => $order->status,
                 'sub_total' => $order->sub_total,
                 'tax_amount' => $order->tax_amount,
