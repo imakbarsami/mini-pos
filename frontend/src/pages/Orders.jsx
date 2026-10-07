@@ -135,7 +135,16 @@ const Orders = () => {
                                         <tr key={order.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
                                             <td className="px-6 py-4 font-medium text-gray-800">{order.order_number}</td>
                                             <td className="px-6 py-4">{order.customer?.name}</td>
-                                            <td className="px-6 py-4">{new Date(order.created_at).toLocaleDateString()}</td>
+                                            <td className="px-6 py-4">
+                                                {new Date(order.created_at).toLocaleString('en-GB', {
+                                                    day: '2-digit',
+                                                    month: 'short',
+                                                    year: 'numeric',
+                                                    hour: '2-digit',
+                                                    minute: '2-digit',
+                                                    hour12: true
+                                                })}
+                                            </td>
                                             <td className="px-6 py-4 text-right font-semibold text-gray-800">৳{parseFloat(order.grand_total).toFixed(2)}</td>
                                             <td className="px-6 py-4 text-center">
                                                 <span className={`px-3 py-1 rounded-full text-xs font-medium ${order.status === 'Completed'

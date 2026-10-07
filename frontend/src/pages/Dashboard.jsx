@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
 import toast from 'react-hot-toast';
-import { 
-  FiTrendingUp, 
-  FiDollarSign, 
-  FiPieChart, 
-  FiShoppingCart, 
-  FiClock, 
+import {
+  FiTrendingUp,
+  FiDollarSign,
+  FiPieChart,
+  FiShoppingCart,
+  FiClock,
   FiCheckCircle,
   FiEye,
   FiCheck
@@ -25,12 +25,12 @@ const Dashboard = () => {
 
       const [dashboardRes, ordersRes] = await Promise.all([
         api.get('/dashboard'),
-        api.get('/orders?limit=5') 
+        api.get('/orders?limit=5')
       ]);
 
       setSummary(dashboardRes.data.data);
-      setOrders(ordersRes.data.data.data); 
-      
+      setOrders(ordersRes.data.data.data);
+
     } catch (error) {
       toast.error('Failed to load dashboard data.');
     } finally {
@@ -52,7 +52,7 @@ const Dashboard = () => {
 
   return (
     <div className="max-w-7xl mx-auto space-y-8">
-      
+
       {/* Accounting Summary Section */}
       <div>
         <h2 className="text-lg font-semibold text-gray-800 mb-4">Accounting Summary</h2>
@@ -167,27 +167,35 @@ const Dashboard = () => {
                   <tr key={order.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
                     <td className="px-6 py-4 font-medium text-gray-800">{order.order_number}</td>
                     <td className="px-6 py-4">{order.customer?.name}</td>
-                    <td className="px-6 py-4">{new Date(order.created_at).toLocaleDateString()}</td>
+                    <td className="px-6 py-4">
+                      {new Date(order.created_at).toLocaleString('en-GB', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: true
+                      })}
+                    </td>
                     <td className="px-6 py-4 text-right font-semibold">৳{parseFloat(order.grand_total).toFixed(2)}</td>
                     <td className="px-6 py-4 text-center">
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                        order.status === 'Completed' 
-                          ? 'bg-emerald-100 text-emerald-700' 
+                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${order.status === 'Completed'
+                          ? 'bg-emerald-100 text-emerald-700'
                           : 'bg-orange-100 text-orange-700'
-                      }`}>
+                        }`}>
                         {order.status}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-center flex justify-center gap-2">
                       {order.status === 'Pending' ? (
-                        <button 
+                        <button
                           className="flex items-center gap-1 bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700 transition-colors"
                           title="Complete Order"
                         >
                           <FiCheck size={14} /> Complete
                         </button>
                       ) : (
-                        <button 
+                        <button
                           className="flex items-center gap-1 bg-gray-800 text-white px-3 py-1.5 rounded hover:bg-gray-900 transition-colors"
                           title="View Invoice"
                         >
