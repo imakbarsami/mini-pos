@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import { FiSearch, FiCalendar, FiChevronLeft, FiChevronRight, FiCheck, FiEye } from 'react-icons/fi';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import Pagination from '../components/Pagination';
+import Swal from 'sweetalert2';
 
 const Orders = () => {
     const [orders, setOrders] = useState([]);
@@ -23,7 +24,14 @@ const Orders = () => {
         setLoading(true);
         try {
 
-            const response = await api.get(`/orders?page=${currentPage}&search=${search}&date=${date}&status=${status}`);
+            const response = await api.get('/orders', {
+                params: {
+                    page: currentPage,
+                    search,
+                    date,
+                    status,
+                }
+            });
 
             const responseData = response.data.data;
             setOrders(responseData.data);
@@ -34,6 +42,48 @@ const Orders = () => {
             toast.error('Failed to fetch orders.');
         } finally {
             setLoading(false);
+        }
+    };
+
+
+    const handleCompleteOrder = async (orderId) => {
+
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: "Do you want to mark this order as Completed?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#2563eb',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Yes, Complete it!',
+            cancelButtonText: 'Cancel'
+        });
+
+
+        if (result.isConfirmed) {
+
+            try {
+
+                const response = await api.put(`/orders/${orderId}/complete`);
+
+                if (response.data.status === 200) {
+                    Swal.fire(
+                        'Completed!',
+                        response.data.message,
+                        'success'
+                    );
+                    setOrders(prev =>
+                        prev.map(order =>
+                            order.id === orderId
+                                ? { ...order, status: 'Completed' }
+                                : order
+                        )
+                    );
+                }
+            } catch (error) {
+                const errorMsg = error.response?.data?.message || 'Failed to complete order.';
+                Swal.fire('Error!', errorMsg, 'error');
+            }
         }
     };
 
@@ -157,6 +207,7 @@ const Orders = () => {
                                             <td className="px-6 py-4 text-center flex justify-center gap-2">
                                                 {order.status === 'Pending' ? (
                                                     <button
+                                                        onClick={() => handleCompleteOrder(order.id)}
                                                         className="flex items-center gap-1 bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700 transition-colors shadow-sm"
                                                         title="Complete Order"
                                                     >

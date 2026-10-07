@@ -12,6 +12,7 @@ import {
   FiCheck
 } from 'react-icons/fi';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+import Swal from 'sweetalert2';
 
 const Dashboard = () => {
 
@@ -35,6 +36,48 @@ const Dashboard = () => {
       toast.error('Failed to load dashboard data.');
     } finally {
       setLoading(false);
+    }
+  };
+
+
+  const handleCompleteOrder = async (orderId) => {
+
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "Do you want to mark this order as Completed?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#2563eb',
+      cancelButtonColor: '#6b7280',
+      confirmButtonText: 'Yes, Complete it!',
+      cancelButtonText: 'Cancel'
+    });
+
+
+    if (result.isConfirmed) {
+
+      try {
+
+        const response = await api.put(`/orders/${orderId}/complete`);
+
+        if (response.data.status === 200) {
+          Swal.fire(
+            'Completed!',
+            response.data.message,
+            'success'
+          );
+          setOrders(prev =>
+            prev.map(order =>
+              order.id === orderId
+                ? { ...order, status: 'Completed' }
+                : order
+            )
+          );
+        }
+      } catch (error) {
+        const errorMsg = error.response?.data?.message || 'Failed to complete order.';
+        Swal.fire('Error!', errorMsg, 'error');
+      }
     }
   };
 
@@ -180,8 +223,8 @@ const Dashboard = () => {
                     <td className="px-6 py-4 text-right font-semibold">৳{parseFloat(order.grand_total).toFixed(2)}</td>
                     <td className="px-6 py-4 text-center">
                       <span className={`px-3 py-1 rounded-full text-xs font-medium ${order.status === 'Completed'
-                          ? 'bg-emerald-100 text-emerald-700'
-                          : 'bg-orange-100 text-orange-700'
+                        ? 'bg-emerald-100 text-emerald-700'
+                        : 'bg-orange-100 text-orange-700'
                         }`}>
                         {order.status}
                       </span>
@@ -189,7 +232,8 @@ const Dashboard = () => {
                     <td className="px-6 py-4 text-center flex justify-center gap-2">
                       {order.status === 'Pending' ? (
                         <button
-                          className="flex items-center gap-1 bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700 transition-colors"
+                          onClick={() => handleCompleteOrder(order.id)}
+                          className="flex items-center gap-1 bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700 transition-colors shadow-sm"
                           title="Complete Order"
                         >
                           <FiCheck size={14} /> Complete
