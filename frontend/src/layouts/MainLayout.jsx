@@ -1,7 +1,7 @@
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../features/authSlice';
-import { MdDashboard, MdPointOfSale, MdLogout } from 'react-icons/md';
+import { MdDashboard, MdPointOfSale, MdLogout, MdList } from 'react-icons/md';
 
 const MainLayout = () => {
 
@@ -39,6 +39,13 @@ const MainLayout = () => {
             className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${location.pathname === '/pos' ? 'bg-blue-600' : 'hover:bg-gray-800'}`}
           >
             <MdPointOfSale size={20} /> Point of Sale
+          </Link>
+
+          <Link 
+            to="/orders" 
+            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${location.pathname === '/orders' ? 'bg-blue-600' : 'hover:bg-gray-800'}`}
+          >
+            <MdList size={20} /> All Orders
           </Link>
 
         </nav>

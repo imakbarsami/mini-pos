@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard';
 import POS from './pages/POS';
 import  ProtectedRoute  from './components/ProtectedRoute';
 import Error from './components/Error';
+import Orders from './pages/Orders';
 
 function App() {
 
@@ -35,6 +36,7 @@ function App() {
         >
           <Route index element={<Dashboard />} />
           <Route path="pos" element={<POS />} />
+          <Route path="orders" element={<Orders />} />
 
         </Route>
       </Routes>
