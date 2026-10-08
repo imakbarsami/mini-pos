@@ -27,4 +27,6 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('/orders/{id}', [OrderController::class, 'show']);
 
     Route::get('/dashboard', [DashboardController::class, 'index']);
+
+    Route::post('/logout',[AuthController::class,'logout']);
 });
