@@ -232,7 +232,7 @@ const Products = () => {
                                                     className="w-10 h-10 rounded-lg object-cover border border-gray-200"
                                                 />
                                             ) : (
-                                                <div className="w-10 h-10 rounded-lg bg-gray-100 border border-gray-200 flex items-center justify-center text-gray-400 text-xs">
+                                                <div className="w-10 h-10 rounded-lg bg-gray-100 border border-gray-200 flex items-center justify-center text-gray-400 text-[10px]">
                                                     No Img
                                                 </div>
                                             )}

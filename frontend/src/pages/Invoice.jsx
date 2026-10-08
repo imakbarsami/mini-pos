@@ -170,7 +170,7 @@ const Invoice = () => {
                     <div className="flex justify-between items-start border-b-2 border-gray-100 pb-8 mb-8">
                         <div>
                             <h1 className="text-4xl font-extrabold text-blue-600 tracking-tight">MINI POS</h1>
-                            <p className="text-sm text-gray-500 mt-2">123 Business Avenue, Tech Park<br />Dhaka, Bangladesh 1212<br />sami@example.com</p>
+                            <p className="text-sm text-gray-500 mt-2">45 CDA Avenue, East Nasirabad<br />Chittagong, Bangladesh 1212<br />info@sami.com</p>
                         </div>
                         <div className="text-right">
 
@@ -291,7 +291,7 @@ const Invoice = () => {
                     {/* Footer Section */}
                     <div className="border-t border-gray-200 pt-8 flex justify-between items-end">
                         <div className="text-sm text-gray-500">
-                            <p>For any inquiries, please contact sami@example.com</p>
+                            <p>For any inquiries, please contact <span className="text-sm font-semibold text-gray-500">info@sami.com</span></p>
                         </div>
 
                         <div className="text-center">

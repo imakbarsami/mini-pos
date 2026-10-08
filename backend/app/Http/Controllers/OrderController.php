@@ -40,7 +40,6 @@ class OrderController extends Controller
                         ->paginate($limit);
 
         $orders->getCollection()->makeHidden([
-            'created_at',
             'updated_at',
         ]);
 
