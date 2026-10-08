@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { logout } from '../features/authSlice';
+import {store} from '../store'
 
 const api = axios.create({
   
@@ -24,5 +26,19 @@ api.interceptors.request.use((config) => {
 
   return Promise.reject(error);
 });
+
+
+api.interceptors.response.use(
+    (response) => response,
+
+    (error) => {
+       
+        if (error.response?.status === 401) {
+            store.dispatch(logout());                     
+        }
+
+        return Promise.reject(error);
+    }
+);
 
 export default api;

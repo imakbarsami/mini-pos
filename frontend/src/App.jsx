@@ -12,7 +12,7 @@ import Invoice from './pages/Invoice';
 
 function App() {
 
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const isAuthenticated = useSelector((state) => state.auth.token);
   const user=useSelector(state=>console.log(state))
 
   return (

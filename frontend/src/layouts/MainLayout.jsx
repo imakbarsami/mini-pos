@@ -2,6 +2,8 @@ import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../features/authSlice';
 import { MdDashboard, MdPointOfSale, MdLogout, MdList } from 'react-icons/md';
+import api from '../services/api'
+import toast from 'react-hot-toast';
 
 const MainLayout = () => {
 
@@ -10,7 +12,15 @@ const MainLayout = () => {
   const location = useLocation();
   const user = useSelector((state) => state.auth.user);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+
+    try{
+      const res=await api.post('/logout');
+      toast.success(res.data.message);
+    }
+    catch(error){
+      console.log(error);
+    }
     dispatch(logout());
     navigate('/login');
   };
@@ -70,7 +80,7 @@ const MainLayout = () => {
 
             <button 
               onClick={handleLogout}
-              className="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
+              className="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors cursor-pointer"
               title="Logout"
             >
               <MdLogout size={20} />
