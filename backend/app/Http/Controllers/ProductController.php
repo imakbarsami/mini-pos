@@ -170,10 +170,10 @@ class ProductController extends Controller
             ]);
 
             return response()->json([
-                'status' => 200,
+                'status' => 201,
                 'message' => 'Product updated successfully!',
                 'data' => $product
-            ], 200);
+            ], 201);
 
         } catch (\Exception $e) {
             return response()->json([

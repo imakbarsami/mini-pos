@@ -4,6 +4,7 @@ import { logout } from '../features/authSlice';
 import { MdDashboard, MdPointOfSale, MdLogout, MdList } from 'react-icons/md';
 import api from '../services/api'
 import toast from 'react-hot-toast';
+import { FiInbox } from 'react-icons/fi';
 
 const MainLayout = () => {
 
@@ -14,11 +15,11 @@ const MainLayout = () => {
 
   const handleLogout = async () => {
 
-    try{
-      const res=await api.post('/logout');
+    try {
+      const res = await api.post('/logout');
       toast.success(res.data.message);
     }
-    catch(error){
+    catch (error) {
       console.log(error);
     }
     dispatch(logout());
@@ -37,25 +38,32 @@ const MainLayout = () => {
 
         <nav className="flex-1 p-4 space-y-2">
 
-          <Link 
-            to="/" 
+          <Link
+            to="/"
             className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${location.pathname === '/' ? 'bg-blue-600' : 'hover:bg-gray-800'}`}
           >
             <MdDashboard size={20} /> Dashboard
           </Link>
 
-          <Link 
-            to="/pos" 
+          <Link
+            to="/pos"
             className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${location.pathname === '/pos' ? 'bg-blue-600' : 'hover:bg-gray-800'}`}
           >
             <MdPointOfSale size={20} /> Point of Sale
           </Link>
 
-          <Link 
-            to="/orders" 
+          <Link
+            to="/orders"
             className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${location.pathname === '/orders' ? 'bg-blue-600' : 'hover:bg-gray-800'}`}
           >
             <MdList size={20} /> All Orders
+          </Link>
+
+          <Link
+            to="/products"
+            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${location.pathname === '/products' ? 'bg-blue-600' : 'hover:bg-gray-800'}`}
+          >
+            <FiInbox size={20} /> Products
           </Link>
 
         </nav>
@@ -78,7 +86,7 @@ const MainLayout = () => {
               <p className="text-xs text-gray-500">{user?.email}</p>
             </div>
 
-            <button 
+            <button
               onClick={handleLogout}
               className="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors cursor-pointer"
               title="Logout"

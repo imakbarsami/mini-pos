@@ -31,7 +31,7 @@ const POS = () => {
 
         const [customerRes, productRes] = await Promise.all([
           api.get('/customers'),
-          api.get('/products')
+          api.get('/products-dropdown')
         ]);
          
         // console.log(customerRes);

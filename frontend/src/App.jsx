@@ -9,6 +9,7 @@ import  ProtectedRoute  from './components/ProtectedRoute';
 import Error from './components/Error';
 import Orders from './pages/Orders';
 import Invoice from './pages/Invoice';
+import Products from './pages/Prouduct';
 
 function App() {
 
@@ -39,6 +40,7 @@ function App() {
           <Route path="pos" element={<POS />} />
           <Route path="orders" element={<Orders />} />
           <Route path="invoice/:id" element={<Invoice />} />
+          <Route path="/products" element={<Products />} />
 
         </Route>
       </Routes>
