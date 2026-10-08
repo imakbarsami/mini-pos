@@ -4,7 +4,7 @@ import { logout } from '../features/authSlice';
 import { MdDashboard, MdPointOfSale, MdLogout, MdList } from 'react-icons/md';
 import api from '../services/api'
 import toast from 'react-hot-toast';
-import { FiInbox } from 'react-icons/fi';
+import { FiInbox, FiUsers } from 'react-icons/fi';
 
 const MainLayout = () => {
 
@@ -64,6 +64,14 @@ const MainLayout = () => {
             className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${location.pathname === '/products' ? 'bg-blue-600' : 'hover:bg-gray-800'}`}
           >
             <FiInbox size={20} /> Products
+          </Link>
+
+
+          <Link
+            to="/customers"
+            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${location.pathname === '/customers' ? 'bg-blue-600' : 'hover:bg-gray-800'}`}
+          >
+            <FiUsers size={20} /> Customers
           </Link>
 
         </nav>

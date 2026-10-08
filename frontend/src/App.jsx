@@ -10,6 +10,7 @@ import Error from './components/Error';
 import Orders from './pages/Orders';
 import Invoice from './pages/Invoice';
 import Products from './pages/Prouduct';
+import Customers from './components/Customer';
 
 function App() {
 
@@ -41,6 +42,7 @@ function App() {
           <Route path="orders" element={<Orders />} />
           <Route path="invoice/:id" element={<Invoice />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/customers" element={<Customers />} />
 
         </Route>
       </Routes>
