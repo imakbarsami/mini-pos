@@ -38,9 +38,13 @@ class ProductController extends Controller
                 $query->whereDate('created_at', '<=', $request->end_date);
             }
 
-            $perPage = $request->input('per_page', 10);
+            $perPage = $request->input('per_page', 7);
             
             $products = $query->latest()->paginate($perPage);
+            $products->getCollection()->makeHidden([
+                'created_at',
+                'updated_at',
+            ]);
 
             return response()->json([
                 'status' => 200,
@@ -102,6 +106,11 @@ class ProductController extends Controller
                 'price' => $request->price,
                 'stock_quantity' => $request->stock_quantity,
                 'image' => $imagePath,
+            ]);
+
+            $product->makeHidden([
+                'created_at',
+                'updated_at'
             ]);
 
             return response()->json([
@@ -169,6 +178,12 @@ class ProductController extends Controller
                 'image' => $imagePath,
             ]);
 
+            $product->makeHidden([
+                'created_at',
+                'updated_at'
+            ]);
+
+            
             return response()->json([
                 'status' => 201,
                 'message' => 'Product updated successfully!',

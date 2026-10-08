@@ -39,6 +39,11 @@ class OrderController extends Controller
         $orders = $query->orderBy('id', 'desc')
                         ->paginate($limit);
 
+        $orders->getCollection()->makeHidden([
+            'created_at',
+            'updated_at',
+        ]);
+
         return response()->json([
             'status' => 200,
             'data' => $orders 
