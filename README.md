@@ -1,5 +1,5 @@
 
-# MOI-POS 🛒
+# MINI-POS 🛒
 
 A modern, full-stack Point of Sale (POS) and inventory management system built with Laravel (API) and React. This project handles daily sales operations, customer management, inventory tracking, and order processing.
 
